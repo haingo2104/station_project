@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  user_id  Int    @id @default(autoincrement())
+  fullname String
+  email    String @unique
+  password String
+   mfaCode   String?
+  role Roles @default(USER)
+  permissions UserPermissions[]
+}
+
+enum Roles {
+  USER
+  ADMIN
+}
+
+model UserPermissions {
+  id          Int      @id @default(autoincrement())
+  user        Users    @relation(fields: [user_id], references: [user_id])
+  user_id     Int
+  permission  Permissions @relation(fields: [permission_id], references: [id])
+  permission_id Int
+}
+
+model Permissions {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users        UserPermissions[] 
+
+}
+
+model Fournisseurs {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  email       String
+  telephone   String
+  commandes   CommandesCarburant[]
+}
+
+model CommandesCarburant {
+  id            Int          @id @default(autoincrement())
+  quantite      Float
+  prix_unitaire Float
+  date_commande DateTime     @default(now())
+  carburant_id  Int
+  user_id       Int
+  fournisseur_id Int         
+  Fournisseurs  Fournisseurs  @relation(fields: [fournisseur_id], references: [id])
+  Carburants    Carburants   @relation(fields: [carburant_id], references: [carburant_id])
+}
+
+
+model Carburants {
+  carburant_id Int @id @default(autoincrement())
+  nom String
+  prix Prix[]
+  stock Stock[]
+  tuyaux Tuyaux[]
+  relever Relever[]
+  commandes     CommandesCarburant[]
+}
+
+model Prix {
+  prix_id Int @id @default(autoincrement())
+  carburant_id Int
+  prix Float
+  carburant Carburants @relation(fields: [carburant_id], references: [carburant_id])
+  Date DateTime @default(now())
+}
+
+
+model Stock {
+  stock_id Int @id @default(autoincrement())
+  quantite Float
+  Date DateTime @default(now())
+  carburant_id Int
+  carburant Carburants @relation(fields: [carburant_id], references: [carburant_id])
+}
+
+model Pompe {
+  pompe_id Int @id @default(autoincrement())
+  tuyaux Tuyaux[]
+  vente Vente[]
+  relever Relever[]
+}
+
+model Pompiste {
+  pompiste_id Int @id @default(autoincrement())
+  nom String
+  vente Vente[]
+  salaire     Float
+}
+
+model Tuyaux {
+  tuyau_id Int @id @default(autoincrement())
+  carburant_id Int
+  carburant Carburants @relation(fields: [carburant_id], references: [carburant_id])
+  pompe_id Int
+  pompe Pompe @relation(fields: [pompe_id] , references: [pompe_id])
+}
+
+model ModeDePaie {
+  modeDePaie_id Int @id @default(autoincrement())
+  nom String
+  date DateTime @default(now())
+  references References[]
+  vente Vente[]
+}
+
+model Vente {
+  vente_id Int @id @default(autoincrement())
+  total Float
+  date DateTime @default(now())
+  pompe_id Int
+  pompe Pompe @relation(fields: [pompe_id] , references: [pompe_id])
+  pompiste_id Int
+  pompiste Pompiste @relation(fields: [pompiste_id] , references: [pompiste_id])
+  modeDePaie_id Int
+  modeDePaie ModeDePaie @relation(fields: [modeDePaie_id] , references: [modeDePaie_id])
+  reference References[]
+}
+
+
+ 
+model Relever {
+  relever_id Int @id @default(autoincrement())
+  quantiteAvant Float
+  quantiteApres Float?
+  date DateTime @default(now())
+  carburant_id Int
+  carburant Carburants @relation(fields: [carburant_id], references: [carburant_id])
+  pompe_id Int
+  pompe Pompe @relation(fields: [pompe_id], references: [pompe_id])
+}
+
+model References {
+  reference_id Int @id @default(autoincrement())
+  ref_value String
+  modeDePaie_id Int
+  modeDePaie ModeDePaie @relation(fields: [modeDePaie_id], references: [modeDePaie_id])
+  vente_id Int
+  montant Int
+  vente Vente @relation(fields: [vente_id] , references: [vente_id])
+  date DateTime @default(now())
+
+}
+
+

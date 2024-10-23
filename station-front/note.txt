@@ -1,0 +1,330 @@
+tableau de bord : - libelé bien précis avec les graphes , stock à jour avec alertes si c'est trop bas (barre rouge par exemples , barre lavalava)
+carburant + prix : à combiner // fini 
+pompes et tuyaux : à combiner // fini
+id à supprimer  // fini
+ajout vente => ref à modifier : tableau éditable 
+vente ts azo supprimerna ///
+pompistes ts azo supprimerna fa asiana colonne oe efa licencié na mbola actif   (en cours) // fini
+de même pour mode de paiement (en cours)  // fini
+pour les tri : interface ovaina
+Relevé : vente à saisir en premier , après refa manao saisi anle relevé de ze quantité après lasa quantité avant automatique (champ disabled) // fini
+=> vitaina daol aloha ny relevé amin pompe 1 , de vérification automatique avec les ventes , de alerte verte si c'est mihoatra , rouge ra ts ampy , ok refa comparaison réussi
+- bordure arrondi à enlever // fini
+
+
+Action isaky ny table atambatra ray
+- modal à centrer
+- exportna donné : pdf ihany de listerna
+
+
+
+
+
+
+
+
+
+bug : suppression carburant (le resaka stockage , local storage), affichage dans pompes (nom undefined : carburant)
+
+
+
+
+quAprès = ? 0
+quAVant = 10 
+pompe = 3
+prix = 11000
+idCarburant= 2
+
+quAprès = ? 44
+quAVant = 50 
+pompe = 3
+prix = 15000
+idCarburant = 1
+
+vente : 
+total = 200.000
+
+
+
+
+
+Pour calculer le bénéfice, les éléments essentiels  sont :
+
+Prix d'achat (coût de revient) : Le coût auquel vous avez acheté le produit (prix HT).
+Prix de vente (prix HT) : Le prix auquel vous vendez le produit avant d'ajouter les taxes.
+Taxes :
+TVA (Taxe sur la Valeur Ajoutée) : Le pourcentage de la TVA applicable sur le produit.
+Autres taxes : Toute autre taxe applicable sur le produit (comme la taxe sur les carburants).
+Formule de base pour calculer le bénéfice
+Prix de vente TTC (Toutes Taxes Comprises) :
+
+Prix de vente TTC
+=
+Prix HT
++
+(
+Prix HT
+×
+TVA
+100
+)
++
+(
+Prix HT
+×
+Autres taxes
+100
+)
+Prix de vente TTC=Prix HT+(Prix HT× 
+100
+TVA
+​
+ )+(Prix HT× 
+100
+Autres taxes
+​
+ )
+Bénéfice brut :
+
+B
+e
+ˊ
+n
+e
+ˊ
+fice brut
+=
+Prix de vente HT
+−
+Prix d’achat
+B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice brut=Prix de vente HT−Prix d’achat
+Bénéfice net :
+
+B
+e
+ˊ
+n
+e
+ˊ
+fice net
+=
+B
+e
+ˊ
+n
+e
+ˊ
+fice brut
+−
+Total des taxes
+B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice net=B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice brut−Total des taxes
+Données nécessaires
+Prix d'achat (HT) : Le coût d'acquisition du produit.
+Prix de vente (HT) : Le prix auquel vous vendez le produit sans les taxes.
+TVA : Le taux de la TVA applicable sur le produit.
+Autres taxes : Le taux des autres taxes applicables sur le produit.
+Exemple de calcul
+Imaginons que vous ayez les données suivantes :
+
+Prix d'achat (HT) : 1500.0
+Prix de vente (HT) : 1800.0
+TVA : 20%
+Autres taxes (par exemple, taxe sur les carburants) : 5%
+Calcul du montant de la TVA :
+
+Montant de la TVA
+=
+Prix de vente HT
+×
+TVA
+100
+=
+1800.0
+×
+20
+100
+=
+360.0
+Montant de la TVA=Prix de vente HT× 
+100
+TVA
+​
+ =1800.0× 
+100
+20
+​
+ =360.0
+Calcul du montant des autres taxes :
+
+Montant des autres taxes
+=
+Prix de vente HT
+×
+Autres taxes
+100
+=
+1800.0
+×
+5
+100
+=
+90.0
+Montant des autres taxes=Prix de vente HT× 
+100
+Autres taxes
+​
+ =1800.0× 
+100
+5
+​
+ =90.0
+Prix de vente TTC :
+
+Prix de vente TTC
+=
+Prix de vente HT
++
+Montant de la TVA
++
+Montant des autres taxes
+=
+1800.0
++
+360.0
++
+90.0
+=
+2250.0
+Prix de vente TTC=Prix de vente HT+Montant de la TVA+Montant des autres taxes=1800.0+360.0+90.0=2250.0
+Bénéfice brut :
+
+B
+e
+ˊ
+n
+e
+ˊ
+fice brut
+=
+Prix de vente HT
+−
+Prix d’achat
+=
+1800.0
+−
+1500.0
+=
+300.0
+B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice brut=Prix de vente HT−Prix d’achat=1800.0−1500.0=300.0
+Total des taxes :
+
+Total des taxes
+=
+Montant de la TVA
++
+Montant des autres taxes
+=
+360.0
++
+90.0
+=
+450.0
+Total des taxes=Montant de la TVA+Montant des autres taxes=360.0+90.0=450.0
+Bénéfice net :
+
+B
+e
+ˊ
+n
+e
+ˊ
+fice net
+=
+B
+e
+ˊ
+n
+e
+ˊ
+fice brut
+−
+Total des taxes
+=
+300.0
+−
+450.0
+=
+−
+150.0
+B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice net=B 
+e
+ˊ
+ n 
+e
+ˊ
+ fice brut−Total des taxes=300.0−450.0=−150.0
+
+
+
+
+Details ;
+const prixAchat = 1500.0;     // Prix d'achat HT
+const prixVenteHT = 1800.0;   // Prix de vente HT
+const tva = 20.0;             // TVA en pourcentage
+const autresTaxes = 5.0;      // Autres taxes en pourcentage
+
+// Calcul du montant de la TVA
+const montantTVA = prixVenteHT * (tva / 100);
+
+// Calcul du montant des autres taxes
+const montantAutresTaxes = prixVenteHT * (autresTaxes / 100);
+
+// Calcul du prix de vente TTC
+const prixVenteTTC = prixVenteHT + montantTVA + montantAutresTaxes;
+
+// Calcul du bénéfice brut
+const beneficeBrut = prixVenteHT - prixAchat;
+
+// Calcul du total des taxes
+const totalTaxes = montantTVA + montantAutresTaxes;
+
+// Calcul du bénéfice net
+const beneficeNet = beneficeBrut - totalTaxes;
+
+console.log("Prix de vente TTC:", prixVenteTTC);
+console.log("Bénéfice brut:", beneficeBrut);
+console.log("Total des taxes:", totalTaxes);
+console.log("Bénéfice net:", beneficeNet);
+
+
+

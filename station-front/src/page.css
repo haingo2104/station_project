@@ -1,0 +1,169 @@
+body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: medium;
+
+  /* background: #53b5c7;
+  
+    background: -webkit-linear-gradient(to right, rgb(250, 250, 250), rgba(221, 159, 188));
+  
+    background: linear-gradient(to right, rgb(43, 105, 105), rgb(221, 159, 188)) */
+  background-color: aliceblue;
+}
+
+.champ {
+  color: white;
+}
+
+.input {
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-bottom: none !important;
+  background-color: transparent;
+  padding: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  width: 100%;
+}
+
+.input-group {
+  border-bottom: 1px solid rgb(105, 105, 89);
+  width: 100%;
+}
+
+.input::placeholder {
+  color: #888;
+
+}
+
+.input:focus::placeholder {
+  color: transparent;
+}
+
+.register {
+  color: #888;
+  font-family: "Bodoni MT";
+}
+
+.link {
+  color: white;
+  font-family: "Bodoni MT";
+}
+
+.link:hover {
+  background-color: azure;
+  color: black;
+}
+
+
+.content {
+  /* display: flex; */
+  /* margin-left: 50px; */
+  transition: linear 1s;
+  height: 100%;
+  /* position: relative; */
+}
+
+.card-btn {
+  min-width: 400px;
+  height: 400px;
+  margin-right: 20px;
+}
+
+.card-btn-vente {
+  min-width: 200px;
+  height: 100px;
+  margin-right: 20px;
+}
+
+.sidebar-nav a {
+  color: gray;
+}
+
+.sidebar-nav a:hover {
+  color: azure;
+}
+
+.input-container {
+  width: 100%;
+  gap: 25px;
+}
+
+.input-content {
+  width: 50%;
+}
+
+.total {
+  background-color: rgb(255, 255, 255);
+  box-shadow: 10px 5px 5px rgb(36, 35, 35);
+  padding: 15px;
+  text-align: center;
+
+}
+
+.total h3 {
+  text-shadow: 1px 1px 2px pink;
+}
+
+.app {
+  width: 100%;
+  display: flex
+}
+
+.content {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
+}
+
+.titre-stat h1 {
+  font-size: 40px;
+  letter-spacing: 15px;
+}
+
+
+.bar-container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  position: relative;
+}
+
+.bar {
+  width: 100px;
+  background-color: #4CAF50;
+  /* Couleur pour le bénéfice net */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.bar span {
+  position: absolute;
+  bottom: 5px;
+}
+
+.tooltip {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  text-align: left;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.btn-add:hover {
+  background-color: #2d6d2f;
+  color: aliceblue;
+}

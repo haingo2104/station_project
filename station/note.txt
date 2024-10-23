@@ -1,0 +1,6 @@
+calcul des benefices : 
+
+total des ventes = quantité vendue * prix de ventes
+total cout = quantite vendue * prix d achat
+
+benefice = total des ventes - total cout
