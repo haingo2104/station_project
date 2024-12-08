@@ -2,8 +2,7 @@ import React from "react";
 import Auth from "./pages/Auth"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
-
-
+import 'antd/dist/reset.css';
 import "mdb-react-ui-kit/dist/css/mdb.min.css"
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom"
 import Register from "./pages/Register"
@@ -38,6 +37,7 @@ import StockPompes from "./pages/stock/TestStock.jsx"
 import TestTooltip from "./pages/testTooltip.jsx"
 import CommanderCarburant from "./pages/commandes/CommanderCarburant";
 import AjouterFournisseur from "./pages/fournisseurs/AjouterFournisseur";
+import Welcome from "./pages/Welcome.jsx";
 const App = () => {
     return (
 
@@ -46,7 +46,7 @@ const App = () => {
 
             <Routes>
                 <Route path="/" element={<Auth />} />
-
+                <Route path="/welcome" element={<Welcome />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/vente" element={<MenuVente />} />

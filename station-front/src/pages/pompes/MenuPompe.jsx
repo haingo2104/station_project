@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Col, Row } from "react-bootstrap"
 import SideBar from "../sidebar/Sidebar"
 import { useNavigate } from "react-router-dom"
+import logo from "../../images/logo_station.png";
 
 const MenuPompe = () => {
 
@@ -59,6 +60,17 @@ const MenuPompe = () => {
                 console.error(e.response.data);
 
             })
+    }
+
+    const logout = async (e) => {
+        // e.preventDefault();
+        try {
+            const response = await axios.delete('http://localhost:9000/logout', { withCredentials: true });
+            console.log("message", response.data.message);
+            navigate('/')
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
     }
 
     const ajoutTuyaux = (e) => {
@@ -117,6 +129,17 @@ const MenuPompe = () => {
                 <SideBar />
             </div>
             <div className="py-3 content">
+            <div className=" titre-stat d-flex" style={{ width: "100%" }}>
+                    <div style={{ width: "25%" }}>
+                        <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
+                    </div>
+                    <div style={{ width: "50%" }}>
+                        
+                    </div>
+                    <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
+                        <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
+                    </div>
+                </div>
                 <Row>
                     <Col className="border p-3">
                         <div>

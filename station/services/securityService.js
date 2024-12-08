@@ -153,42 +153,48 @@ export const updateUserPermissions = async (userId, permissions) => {
 
 
 export const loginService = async ({ email, password }) => {
+    // Recherche de l'utilisateur par email
     const user = await prisma.users.findUnique({ where: { email } });
 
+    // Vérification des identifiants
     if (!user || !bcrypt.compareSync(password, user.password)) {
         throw new Error('Email ou mot de passe incorrect');
     }
 
-    // Générer un code MFA
-    const mfaCode = uuidv4().slice(0, 6); // Génère un code à 6 caractères
+    // Génération d'un code MFA aléatoire (6 chiffres)
+    const mfaCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Mise à jour du code MFA dans la base de données
     await prisma.users.update({
         where: { email },
         data: { mfaCode }
     });
 
-    // Envoyer le code MFA par email
+    // Envoi du code MFA par email
     await sendMfaCode(email, mfaCode);
 
-    return user;
+    return { user, mfaRequired: true }; // Retourne l'utilisateur et signale que le MFA est requis
 };
 
-export const verifyMfaService = async ({ email, mfaCode }) => {
-    const user = await prisma.users.findUnique({ where: { email } });
-    console.log("user.mfacode", user.mfaCode);
-    console.log("mfacode", mfaCode);
 
+export const verifyMfaService = async ({ email, mfaCode }) => {
+    // Recherche de l'utilisateur par email
+    const user = await prisma.users.findUnique({ where: { email } });
+
+    // Validation du code MFA
     if (!user || !user.mfaCode || user.mfaCode !== mfaCode) {
         throw new Error('Code MFA incorrect');
     }
 
-    // Supprimez le code MFA après la vérification pour des raisons de sécurité
+    // Suppression du code MFA pour des raisons de sécurité
     await prisma.users.update({
         where: { email },
         data: { mfaCode: null }
     });
 
-    return user;
+    return user; // Retourne l'utilisateur après vérification
 };
+
 
 export const refreshAccessToken = async (refreshToken) => {
     try {

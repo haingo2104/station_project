@@ -122,17 +122,17 @@ const VoirCarburants = () => {
             </div>
 
             <div className="py-3 content ">
-                {/* <div className="mt-5 mb-5 titre-stat d-flex" style={{ width: "100%" }}>
+                <div className=" titre-stat d-flex" style={{ width: "100%" }}>
                     <div style={{ width: "25%" }}>
-                        <img src={logo} alt="" style={{ width: "45%", marginTop: "-20px" }} />
+                        <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
                     </div>
                     <div style={{ width: "50%" }}>
-                        <h1 className="text-center"></h1>
+                        
                     </div>
                     <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
                         <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
                     </div>
-                </div> */}
+                </div>
                 <Row>
                     <Col className=" border p-3">
                         <h4 className="mb-3">Ajout d'un nouveau carburant</h4>
@@ -161,7 +161,7 @@ const VoirCarburants = () => {
                                 </select>
                             </div>
                             <div className="form-group input-content mb-3">
-                                <label htmlFor="prix">Prix</label>
+                                <label htmlFor="prix">Prix (Ar)</label>
                                 <input type="number" name="prix " ref={nouvelprix} className="form-control" />
                             </div>
 
@@ -177,10 +177,10 @@ const VoirCarburants = () => {
                     <table className='table'>
                         <thead>
                             <tr>
-                                <th>nom</th>
-                                <th>prix</th>
+                                <th>Nom</th>
+                                <th>Prix (Ar)</th>
                                 <th>Echéance du prix</th>
-                                <th>Action 1</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 

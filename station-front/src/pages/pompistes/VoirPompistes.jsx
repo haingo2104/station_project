@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios"
 import { useRef, useState } from "react"
 import { useEffect } from "react"
-import { Col, Row, Modal } from "react-bootstrap"
+import { Col, Row, Modal, Button, Form, Table, ModalBody } from "react-bootstrap"
 import SideBar from "../sidebar/Sidebar"
 import { useNavigate } from "react-router-dom"
 import logo from "../../images/logo_station.png";
@@ -17,10 +17,12 @@ const VoirPompistes = () => {
         e.preventDefault()
         axios.post('http://localhost:9000/pompistes', {
             nom: nom.current.value,
-            salaire : salaire.current.value
+            salaire: salaire.current.value
         }, { withCredentials: true })
             .then((res) => {
-                setPompistes(prevPompistes => [...prevPompistes, res.data.pompistes]);
+                const nouveauPompiste = res.data.pompistes;
+                setDeletedPompistes(prevState => prevState.filter(id => id !== nouveauPompiste.pompiste_id));
+                setPompistes(prevPompistes => [...prevPompistes, nouveauPompiste]);
                 navigate('/voirPompistes')
             })
             .catch(e => {
@@ -33,6 +35,17 @@ const VoirPompistes = () => {
     const [selectedId, setSelectedId] = useState(null)
     const [isButton, setIsButton] = useState(true)
     const [deletedPompistes, setDeletedPompistes] = useState([]);
+    const [showList, setShowList] = useState(false); // État pour afficher ou masquer la liste
+    const [showActive, setShowActive] = useState(true); // Case à cocher "Actifs"
+    const [showDeleted, setShowDeleted] = useState(false); // Case à cocher "Supprimés"
+    const [selectedPompiste, setSelectedPompiste] = useState(null); // Pompiste actuellement sélectionné
+    const [showDetailsModal, setShowDetailsModal] = useState(false); // Affichage du modal des détails
+
+    const handleShowDetails = (pompiste) => {
+        setSelectedPompiste(pompiste); // Définit le pompiste sélectionné
+        setShowDetailsModal(true); // Affiche le modal
+    };
+
 
     const handleClick = (id) => {
         setSelectedId(id);
@@ -45,7 +58,7 @@ const VoirPompistes = () => {
         try {
             await axios.put(`http://localhost:9000/pompistes/${selectedId}`, {
                 nom: nouvelleValeurRef.current.value,
-                salaire : nouveauSalaire.current.value
+                salaire: nouveauSalaire.current.value
             });
             setIsButton(true);
 
@@ -85,6 +98,12 @@ const VoirPompistes = () => {
             .catch(e => console.log(e))
     }, [selectedId])
 
+    const filteredPompistes = pompistes.filter((pompiste) => {
+        if (showActive && !deletedPompistes.includes(pompiste.pompiste_id)) return true;
+        if (showDeleted && deletedPompistes.includes(pompiste.pompiste_id)) return true;
+        return false;
+    });
+
     return (
         <div className="app">
             <div className="">
@@ -96,7 +115,7 @@ const VoirPompistes = () => {
                         <img src={logo} alt="" style={{ width: "45%", marginTop: "-20px" }} />
                     </div>
                     <div style={{ width: "50%" }}>
-                        <h1 className="text-center">Pompistes</h1>
+                        <h3 className="text-center">Gestion des pompistes</h3>
                     </div>
                     <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
                         <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
@@ -109,7 +128,7 @@ const VoirPompistes = () => {
                             <input type="text" name="nom " ref={nom} className="form-control" />
                         </div>
                         <div className="form-group input-content mb-3 ">
-                            <label htmlFor="" className="form-label">Salaire :</label>
+                            <label htmlFor="" className="form-label">Salaire (Ar) :</label>
                             <input type="number" name="salaire " ref={salaire} className="form-control" />
                         </div>
                         <div className="mt-3">
@@ -118,37 +137,91 @@ const VoirPompistes = () => {
 
                     </form>
                 </Row>
-                <Row>
-                    <table className='table'>
-                        <thead>
-                            <tr>
-                                <th>Nom</th>
-                                <th>Salaire</th>
-                                <th>Action </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {pompistes.map(item => (
-
-                                <tr key={item.pompiste_id}>
-                                    <td>{item.nom}</td>
-                                    <td>{item.salaire}</td>
-                                    <td>
-                                        <button className="btn btn-success" onClick={() => handleClick(item.pompiste_id)}>Modifier</button>
-                                        {deletedPompistes.includes(item.pompiste_id) ? (
-                                            <span style={{ marginLeft: "15px" }}>Licencié</span>
-                                        ) : (
-                                            <button className="btn btn-danger" style={{ marginLeft: "15px" }} onClick={() => supprimer(item.pompiste_id)}>Supprimer</button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))
-                            }
-                        </tbody>
-                    </table>
-
+                <Row className="mt-4">
+                    <Button variant="info" onClick={() => setShowList(!showList)}>
+                        {showList ? "Masquer les pompistes" : "Voir les pompistes"}
+                    </Button>
                 </Row>
+                {showList && (
+                    <>
+                        <Row className="mt-3">
+                            <Form.Check
+                                type="checkbox"
+                                label="Afficher les employés actuellement en poste"
+                                checked={showActive}
+                                onChange={() => setShowActive(!showActive)}
+                            />
+                            <Form.Check
+                                type="checkbox"
+                                label="Afficher les anciens employés"
+                                checked={showDeleted}
+                                onChange={() => setShowDeleted(!showDeleted)}
+                            />
+                        </Row>
+                        <Row className="mt-3">
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredPompistes.map((item) => (
+                                        <tr key={item.pompiste_id}>
+                                            <td>{item.nom}</td>
+                                            <td>
+                                                <Button variant="warning" style={{ marginRight: "10px" }} onClick={() => handleShowDetails(item.pompiste_id)}>Détails</Button>
+                                                <Button variant="success" onClick={() => handleClick(item.pompiste_id)}>Modifier</Button>
+                                                {deletedPompistes.includes(item.pompiste_id) ? (
+                                                    <span className="ms-3">Licencié</span>
+                                                ) : (
+                                                    <Button
+                                                        variant="danger"
+                                                        className="ms-3"
+                                                        onClick={() => supprimer(item.pompiste_id)}
+                                                    >
+                                                        Supprimer
+                                                    </Button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </Row>
+                        {/* Modal Détails */}
+                        <Modal show={showDetailsModal} onHide={() => setShowDetailsModal(false)}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Détails du pompiste</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {selectedPompiste ? (
+                                    <div>
+                                        <strong>Nom :</strong> {pompistes.find(pompiste => pompiste.pompiste_id === selectedPompiste)?.nom} <br />
+                                        <strong>Salaire :</strong> {pompistes.find(pompiste => pompiste.pompiste_id === selectedPompiste)?.salaire} Ar
+                                        {deletedPompistes.includes(selectedPompiste) ? (
+                                            <div><strong>Statut :</strong> Licencié</div>
+                                        ) : (
+                                            <div><strong>Statut :</strong> Actif</div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div>Aucune information disponible.</div>
+                                )}
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowDetailsModal(false)}
+                                >
+                                    Fermer
+                                </button>
+                            </Modal.Footer>
+                        </Modal>
+
+                    </>
+                )}
                 {!isButton && (
                     <Modal show={true} onHide={() => setIsButton(true)}>
                         <Modal.Header closeButton>

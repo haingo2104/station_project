@@ -210,3 +210,47 @@ export const afficherStock = async() =>{
 
       return relevers
 }
+
+export const calculerStockRestant = async(seuilCritique = 500) => {
+    const carburants = await prisma.carburants.findMany({
+        select : {
+            carburant_id : true,
+            nom : true,
+            stock : {
+                orderBy: {
+                    Date: 'desc', // Assurez-vous que "date" existe dans le modèle Stock
+                },
+                take: 1,
+                select: {
+                    quantite: true,
+                    Date: true, // Assurez-vous que la date est sélectionnée si vous en avez besoin
+                },
+            },
+            relever : {
+                select : {
+                    quantiteApres : true,
+                    quantiteAvant : true
+                }
+            },
+            
+        }
+    })
+
+    return carburants.map((carburant) => {
+        const quantiteLivree = carburant.stock[0]?.quantite || 0;
+        const totalLivraisons = carburant.stock.reduce((sum, l) => sum + l.quantite, 0);
+        const totalConsommation = carburant.relever.reduce(
+            (sum, r) => sum + (r.quantiteAvant - r.quantiteApres),
+            0
+        );
+        const stockRestant = totalLivraisons - totalConsommation;
+        return {
+            nom: carburant.nom,
+            stockRestant: stockRestant,
+            quantiteLivree : quantiteLivree,
+            alerteStockBas: stockRestant < seuilCritique,
+        };
+
+    })
+}
+

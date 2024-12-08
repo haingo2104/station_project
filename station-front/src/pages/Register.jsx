@@ -5,6 +5,7 @@ import { Button, Card, CardBody, Col, Modal, Row, Toast } from "react-bootstrap"
 import SideBar from "./sidebar/Sidebar"
 import logo from "../images/logo_station.png";
 import { useNavigate } from "react-router-dom";
+import { Form } from "react-bootstrap";
 
 const Register = () => {
     const [showModal, setShowModal] = useState(false);
@@ -26,7 +27,7 @@ const Register = () => {
     const handleEditPermissions = (user) => {
         setSelectedUser(user);
         const userPermissionIds = user.permissions.map(p => p.permission.id);
-        console.log("userPermissionIds" , userPermissionIds);
+        console.log("userPermissionIds", userPermissionIds);
         setUserPermissionsActual(userPermissionIds);
         setShowModal(true); // Afficher le modal
     };
@@ -55,6 +56,11 @@ const Register = () => {
             console.error('Erreur lors de la mise à jour des permissions:', error);
         }
     };
+
+    const groupedPermissions = [];
+    for (let i = 0; i < availablePermissions.length; i += 5) {
+        groupedPermissions.push(availablePermissions.slice(i, i + 5));
+    }
 
 
     const handleSubmit = (e) => {
@@ -151,7 +157,7 @@ const Register = () => {
                         <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
                     </div>
                     <div style={{ width: "50%" }}>
-                        <h1 className="text-center">Utilisateurs</h1>
+                        <h2 className="text-center">Gestion des utilisateurs</h2>
                     </div>
                     <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
                         <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
@@ -163,13 +169,13 @@ const Register = () => {
                             <Col>
                                 <div className="form-group">
                                     <label htmlFor="fullname">Nom(s) et Prénom(s) :</label>
-                                    <input type="text" name="fullname" ref={fullname} placeholder='Fullname' className="form-control form-control-lg" />
+                                    <input type="text" name="fullname" ref={fullname}  className="form-control form-control-lg" />
                                 </div>
                             </Col>
                             <Col>
                                 <div className="form-group ">
                                     <label htmlFor="fullname">Email :</label>
-                                    <input type="email" name="email" ref={email} placeholder='Email' className="form-control form-control-lg" />
+                                    <input type="email" name="email" ref={email}  className="form-control form-control-lg" />
                                 </div>
                             </Col>
                         </Row>
@@ -178,7 +184,7 @@ const Register = () => {
                             <Col>
                                 <div className="form-group">
                                     <label htmlFor="fullname">Mot de passe :</label>
-                                    <input type="password" name="password" ref={password} placeholder='Password' className="form-control form-control-lg" />
+                                    <input type="password" name="password" ref={password}  className="form-control form-control-lg" />
                                 </div>
                             </Col>
                             <Col>
@@ -190,8 +196,37 @@ const Register = () => {
 
                         </Row>
                         <Row>
-                            <h3>Manage Permissions for User</h3>
-                            {availablePermissions.map(permission => (
+                            <Col  className="w-75 mx-auto my-4">
+                                <Card className="p-4 shadow-sm">
+                                    <Card.Body>
+                                        <h3>Gérer des autorisations de l’utilisateur</h3>
+                                        <Form>
+                                            <Row>
+                                                {groupedPermissions.map((group, index) => (
+                                                    <Col key={index} md={4} lg={3} className="mb-3">
+                                                        {group.map(permission => (
+                                                            <Form.Check
+                                                                key={permission.id}
+                                                                type="checkbox"
+                                                                id={`form-permission-${permission.id}`}
+                                                                label={permission.name}
+                                                                name="permissions"
+                                                                value={permission.id}
+                                                                checked={userPermissions.includes(permission.id)}
+                                                                onChange={() => handleCheckboxChange(permission.id)}
+                                                                className="mb-2"
+                                                            />
+                                                        ))}
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Form>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+
+
+                            {/* {availablePermissions.map(permission => (
                                 <div key={permission.id}>
                                     <input
                                         type="checkbox"
@@ -203,7 +238,7 @@ const Register = () => {
                                     />
                                     <label htmlFor={`form-permission-${permission.id}`}>{permission.name}</label>
                                 </div>
-                            ))}
+                            ))} */}
                         </Row>
                         <div className="d-grid gap-2 mt-3 col-2 mx-auto">
                             <button type="submit" onClick={handleSubmit} id="bouton" className="btn btn-add btn-outline-success btn-lg">Ajouter</button>

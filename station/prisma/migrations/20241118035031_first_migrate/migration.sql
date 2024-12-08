@@ -12,6 +12,47 @@ CREATE TABLE `Users` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `UserPermissions` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `permission_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Permissions` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `Permissions_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Fournisseurs` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nom` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `telephone` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `CommandesCarburant` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `quantite` DOUBLE NOT NULL,
+    `prix_unitaire` DOUBLE NOT NULL,
+    `date_commande` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `carburant_id` INTEGER NOT NULL,
+    `user_id` INTEGER NOT NULL,
+    `fournisseur_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Carburants` (
     `carburant_id` INTEGER NOT NULL AUTO_INCREMENT,
     `nom` VARCHAR(191) NOT NULL,
@@ -27,19 +68,6 @@ CREATE TABLE `Prix` (
     `Date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`prix_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `PrixDetails` (
-    `prixDetails_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `prix_id` INTEGER NOT NULL,
-    `prixAchat` DOUBLE NOT NULL,
-    `tva` DOUBLE NOT NULL,
-    `taxeCarburant` DOUBLE NOT NULL,
-    `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `PrixDetails_prix_id_key`(`prix_id`),
-    PRIMARY KEY (`prixDetails_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -63,6 +91,7 @@ CREATE TABLE `Pompe` (
 CREATE TABLE `Pompiste` (
     `pompiste_id` INTEGER NOT NULL AUTO_INCREMENT,
     `nom` VARCHAR(191) NOT NULL,
+    `salaire` DOUBLE NOT NULL,
 
     PRIMARY KEY (`pompiste_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -122,10 +151,19 @@ CREATE TABLE `References` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Prix` ADD CONSTRAINT `Prix_carburant_id_fkey` FOREIGN KEY (`carburant_id`) REFERENCES `Carburants`(`carburant_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserPermissions` ADD CONSTRAINT `UserPermissions_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `PrixDetails` ADD CONSTRAINT `PrixDetails_prix_id_fkey` FOREIGN KEY (`prix_id`) REFERENCES `Prix`(`prix_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserPermissions` ADD CONSTRAINT `UserPermissions_permission_id_fkey` FOREIGN KEY (`permission_id`) REFERENCES `Permissions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CommandesCarburant` ADD CONSTRAINT `CommandesCarburant_fournisseur_id_fkey` FOREIGN KEY (`fournisseur_id`) REFERENCES `Fournisseurs`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CommandesCarburant` ADD CONSTRAINT `CommandesCarburant_carburant_id_fkey` FOREIGN KEY (`carburant_id`) REFERENCES `Carburants`(`carburant_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Prix` ADD CONSTRAINT `Prix_carburant_id_fkey` FOREIGN KEY (`carburant_id`) REFERENCES `Carburants`(`carburant_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Stock` ADD CONSTRAINT `Stock_carburant_id_fkey` FOREIGN KEY (`carburant_id`) REFERENCES `Carburants`(`carburant_id`) ON DELETE RESTRICT ON UPDATE CASCADE;

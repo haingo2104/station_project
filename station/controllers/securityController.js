@@ -106,28 +106,46 @@ securityRoute.put('/users/:userId/permissions', async (req, res) => {
 });
 
 securityRoute.post('/login', async (req, res) => {
-    const user = await loginService(req.body);
-    return res
-            .status(200)
-            .cookie('access_token', getAccessToken(user), { httpOnly: false, secure: false, maxAge: 60 * 60 * 1000 })
-            .cookie('refresh_token', getRefreshToken({ id: user.user_id }), { httpOnly: false, secure: false, maxAge: 24 * 3600 * 1000 })
-            .json({ user });
-});
-
-securityRoute.post('/verify-mfa', async (req, res) => {
-    const { email, mfaCode } = req.body;
     try {
-        const user = await verifyMfaService({ email, mfaCode });
+        const { user, mfaRequired } = await loginService(req.body);
+
+        if (mfaRequired) {
+            return res.status(200).json({
+                mfaRequired: true, // Signale que le MFA est nécessaire
+                message: 'Code MFA envoyé',
+            });
+        }
+
         return res
             .status(200)
             .cookie('access_token', getAccessToken(user), { httpOnly: false, secure: false, maxAge: 60 * 60 * 1000 })
             .cookie('refresh_token', getRefreshToken({ id: user.user_id }), { httpOnly: false, secure: false, maxAge: 24 * 3600 * 1000 })
-            .json({ message: 'MFA verified' , user});
+            .json({ user });
+    } catch (error) {
+        console.error('Erreur de connexion:', error.message);
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+
+
+securityRoute.post('/verify-mfa', async (req, res) => {
+    const { email, mfaCode } = req.body;
+
+    try {
+        const user = await verifyMfaService({ email, mfaCode });
+
+        return res
+            .status(200)
+            .cookie('access_token', getAccessToken(user), { httpOnly: false, secure: false, maxAge: 60 * 60 * 1000 })
+            .cookie('refresh_token', getRefreshToken({ id: user.user_id }), { httpOnly: false, secure: false, maxAge: 24 * 3600 * 1000 })
+            .json({ message: 'MFA verified', user });
     } catch (error) {
         console.error('Erreur de vérification du code MFA :', error.message);
         return res.status(400).json({ error: 'Code MFA incorrect' });
     }
 });
+
 
 
 securityRoute.delete('/logout', ConnectedOnly, async (req, res) => {

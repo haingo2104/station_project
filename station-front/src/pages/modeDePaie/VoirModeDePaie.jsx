@@ -125,7 +125,7 @@ const VoirModeDepaie = () => {
                         <thead>
                             <tr>
                                 <th>nom</th>
-                                <th>Action 1</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 

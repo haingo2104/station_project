@@ -80,6 +80,15 @@ const TDBPhysique = () => {
     return `${year}-${month}-${day}`;
   };
 
+  function getDateToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0, donc +1
+    const day = String(today.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  }
+
   useEffect(() => {
 
     const storedDeletedCarburants = localStorage.getItem('deletedCarburants');
@@ -105,12 +114,12 @@ const TDBPhysique = () => {
       .catch(e => console.log(e));
 
     // La date souhaitée
-    const dateChoisie = "2024-08-19";
+    const dateChoisie = getDateToday();
     const formattedDate = formatDate(dateChoisie);
 
     axios.get('http://localhost:9000/ventes/ObtenirTotalVentesJour', {
       params: {
-        date: formattedDate,
+        date: "2024-12-07",
       }
     })
       .then((response) => {
@@ -266,7 +275,7 @@ if (error) {
       
         <Row className="mb-5 mt-5">
           {user.role === "ADMIN" && (
-            <Col className="col-6 col-md-4 mb-4">
+            <Col xs={12} md={4} className="mb-4">
               <Chart
                 chartType="PieChart"
                 data={pieChartData}
@@ -277,7 +286,7 @@ if (error) {
             </Col>
           )}
 
-          <Col className='col-6 col-md-4 mb-4'>
+          <Col xs={12} md={4} className='mb-4'>
             <Chart
               ref={chartRef2}
               height={'300px'}
@@ -300,7 +309,7 @@ if (error) {
             />
 
           </Col>
-          <Col className="col-6 col-md-4 mb-4">
+          <Col xs={12} md={4} className="mb-4">
             <div
               onContextMenu={(e) => handleContextMenu(e, chartRef1)}
               style={{ position: 'relative', width: '100%', height: '300px' }}
@@ -355,7 +364,7 @@ if (error) {
 
 
         <Row className="mt-5">
-          <Col className="col-6 col-md-4 mb-4">
+          <Col xs={12} md={4} className="mb-4">
             <div>
               <Col className="col">
 
@@ -387,7 +396,7 @@ if (error) {
 
             </div>
           </Col>
-          <Col className="col-6 col-md-4 mb-4">
+          <Col xs={12} md={4} className="mb-4">
             <div
               onContextMenu={(e) => handleContextMenu(e, chartRef2)}
               style={{ position: 'relative', width: '100%', height: '300px' }}
@@ -416,7 +425,7 @@ if (error) {
               />
             </div>
           </Col>
-          <Col className="col-6 col-md-4 mb-4">
+          <Col xs={12} md={4} className="mb-4">
             <div
               onContextMenu={(e) => handleContextMenu(e, chartRef3)}
               style={{ position: 'relative', width: '100%', height: '300px' }}
@@ -438,6 +447,7 @@ if (error) {
                   vAxis: {
                     title: 'Pompiste',
                   },
+                  colors: ['#FF5733'],
                   legend: { position: 'none' },
                   bar: { groupWidth: '75%' },
                   isStacked: true

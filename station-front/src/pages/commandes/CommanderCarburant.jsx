@@ -108,7 +108,7 @@ const CommanderCarburant = () => {
                         <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
                     </div>
                     <div style={{ width: "50%" }}>
-                        <h1 className="text-center">Commandes</h1>
+                        <h3 className="text-center">Gestion des commandes</h3>
                     </div>
                     <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
                         <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
@@ -149,7 +149,7 @@ const CommanderCarburant = () => {
                         </div>
                         <div className="d-flex mb-3 input-container">
                             <div className='input-content'>
-                                <label>Quantité (en litres) :</label>
+                                <label>Quantité (L) :</label>
                                 <input
                                     className='form-control'
                                     type="number"
@@ -169,7 +169,7 @@ const CommanderCarburant = () => {
                         </div>
                         <div className="d-flex mb-3 input-container">
                             <div className='input-content'>
-                                <label>Total (en Ariary) :</label>
+                                <label>Total (Ar) :</label>
                                 <input
                                     className='form-control'
                                     type="number"
@@ -198,7 +198,7 @@ const CommanderCarburant = () => {
                             <tr>
                                 <th>Carburant</th>
                                 <th>Fournisseurs</th>
-                                <th>Quantité</th>
+                                <th>Quantité (L)</th>
                                 <th>Date du commande</th>
                             </tr>
                         </thead>

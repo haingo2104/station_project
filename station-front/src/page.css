@@ -167,3 +167,207 @@ body {
   background-color: #2d6d2f;
   color: aliceblue;
 }
+
+/* sidebar.css */
+/* .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #222831;
+  color: #fff;
+  transition: transform 0.3s ease-in-out;
+} */
+
+/* .sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar-toggle {
+  background-color: #222831;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+} */
+
+/* Media query pour les petits écrans */
+/* @media (max-width: 768px) {
+  .sidebar {
+      position: fixed;
+      left: 0;
+      width: 200px;
+      transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+      transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+      display: block; 
+  }
+} */
+
+
+
+#metal {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), /* Couche blanche semi-transparente */
+    url("https://plus.unsplash.com/premium_photo-1675526090845-a8b982cabae6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+  background-size: cover;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: glass 10s linear infinite;
+}
+
+#glass {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), /* Couche blanche semi-transparente */
+    url("https://plus.unsplash.com/premium_photo-1675526090845-a8b982cabae6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+  background-size: cover;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: glass 10s linear infinite;
+}
+
+#plastic {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), /* Couche blanche semi-transparente */
+    url("https://plus.unsplash.com/premium_photo-1675526090845-a8b982cabae6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+  background-size: cover;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: glass 10s linear infinite;
+}
+#glass, #plastic {
+  font-size: 80px; /* Ajustez cette valeur à la taille souhaitée */
+}
+
+/* .logout-container {
+  position: fixed; 
+  top: 0;
+  right: 0;
+  margin: 10px; 
+} */
+.logout-container {
+  position : fixed;
+  right: 0;
+  margin-right: 20px;
+}
+.logo-container {
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.title-container {
+  text-align: center;
+}
+@keyframes zoomRotate {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.logo-container img {
+  animation: zoomRotate 2s ease-in-out;
+}
+
+
+/* Animation du typewriter */
+@keyframes typeWriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.title-container h1 {
+
+  animation: typeWriter 1s steps(40) forwards; /* Animation très rapide */
+  
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid black; /* Effet de curseur */
+}
+
+p {
+  margin: 0px;
+  color: transparent;
+  font-size: 100px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+@keyframes metal {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 200px;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes glass {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: -200px;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes plastic {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 200px;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Animation pour le logo */
+@keyframes zoomRotate {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+
+
+

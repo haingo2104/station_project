@@ -75,7 +75,7 @@ const Reference = () => {
                                 <th>reference_id</th>
                                 <th>vente_id</th>
                                 <th>ModeDePaie</th>
-                                <th>Montant</th>
+                                <th>Montant (Ar)</th>
                                 <th>référence</th>
                                 <th>Date</th>
                                 <th>Action</th>

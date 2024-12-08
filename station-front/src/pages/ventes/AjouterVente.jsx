@@ -194,7 +194,7 @@ const AjouterVente = () => {
                                 )
                             }
                             <div style={{ width: "25%", marginRight: "25px" }}>
-                                <label htmlFor="montant">Montant :</label>
+                                <label htmlFor="montant">Montant (Ar):</label>
                                 <input type="number" placeholder="montant" className="form-control" ref={montant} />
                             </div>
                             <div className="mt-4" style={{ width: "25%" }}>

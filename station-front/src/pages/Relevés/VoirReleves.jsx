@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { Col, Row, Modal, Form, Toast } from "react-bootstrap"
 import SideBar from "../sidebar/Sidebar"
 import { useNavigate } from "react-router-dom"
+import logo from "../../images/logo_station.png";
 
 const VoirReleves = () => {
     const [relevers, setRelevers] = useState([])
@@ -39,37 +40,48 @@ const VoirReleves = () => {
 
     const [isPompeDisabled, setIsPompeDisabled] = useState(false)
 
+    const logout = async (e) => {
+        // e.preventDefault();
+        try {
+            const response = await axios.delete('http://localhost:9000/logout', { withCredentials: true });
+            console.log("message", response.data.message);
+            navigate('/')
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
+    }
+
     const handleTerminer = async () => {
         console.log("réussi");
-         setIsPompeDisabled(false)
-         const pompe_id = nouveauPompe_id.current.value;
-         try {
-             const ventesResponse = await axios.get(`http://localhost:9000/ventes/totalVenteParPompe/${pompe_id}`);
-             const totalVentes = ventesResponse.data.ventes.totalGlobal;
+        setIsPompeDisabled(false)
+        const pompe_id = nouveauPompe_id.current.value;
+        try {
+            const ventesResponse = await axios.get(`http://localhost:9000/ventes/totalVenteParPompe/${pompe_id}`);
+            const totalVentes = ventesResponse.data.ventes.totalGlobal;
 
-             const releversResponse = await axios.get(`http://localhost:9000/relevers/obtenirTotalParPompe/${pompe_id}`);
-             const totalReleves = releversResponse.data.relevers.totalReleves;
+            const releversResponse = await axios.get(`http://localhost:9000/relevers/obtenirTotalParPompe/${pompe_id}`);
+            const totalReleves = releversResponse.data.relevers.totalReleves;
 
-              console.log("totalVentes" + totalVentes);
-              console.log("totalReleves" + totalReleves);
-             if (totalVentes === totalReleves) {
-                 setToastMessage("Succès : Les totaux correspondent !");
-                 setToastVariant("success");
-                 setShowA(true);
-             } else if (totalReleves > totalVentes) {
-                 setToastMessage(`Erreur : Total relevé (${totalReleves}) est plus grand que total vente (${totalVentes}) !`);
-                 setToastVariant("danger");
-                 setShowA(true);
-             } else {
-                 setToastMessage(`Erreur : Total vente (${totalVentes}) est supérieur à total relevé (${totalReleves}) !`);
-                 setToastVariant("danger");
-                 setShowA(true);
-             }
-         } catch (error) {
-             setToastMessage('Erreur lors de la vérification des totaux. Veuillez vérifier la console pour plus de détails.');
-             setToastVariant("danger");
-             setShowA(true);
-         }
+            console.log("totalVentes" + totalVentes);
+            console.log("totalReleves" + totalReleves);
+            if (totalVentes === totalReleves) {
+                setToastMessage("Succès : Les totaux correspondent !");
+                setToastVariant("success");
+                setShowA(true);
+            } else if (totalReleves > totalVentes) {
+                setToastMessage(`Erreur : Total relevé (${totalReleves}) est plus grand que total vente (${totalVentes}) !`);
+                setToastVariant("danger");
+                setShowA(true);
+            } else {
+                setToastMessage(`Erreur : Total vente (${totalVentes}) est supérieur à total relevé (${totalReleves}) !`);
+                setToastVariant("danger");
+                setShowA(true);
+            }
+        } catch (error) {
+            setToastMessage('Erreur lors de la vérification des totaux. Veuillez vérifier la console pour plus de détails.');
+            setToastVariant("danger");
+            setShowA(true);
+        }
     }
 
     const ajouterRelever = async (e) => {
@@ -266,6 +278,17 @@ const VoirReleves = () => {
                 <SideBar />
             </div>
             <div className="col py-3 content">
+                <div className="mt-3 mb-5 titre-stat d-flex" style={{ width: "100%" }}>
+                    <div style={{ width: "25%" }}>
+                        <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
+                    </div>
+                    <div style={{ width: "50%" }}>
+                        <h3 className="text-center">Gestion des relevés</h3>
+                    </div>
+                    <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
+                        <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
+                    </div>
+                </div>
                 <Row className="mb-5">
                     <form action="" >
                         <div className="d-flex mb-3 input-container">
@@ -283,7 +306,7 @@ const VoirReleves = () => {
                             <div className="input-content">
                                 <label htmlFor="carburant ">Carburant</label>
                                 <select className="form-select" ref={nouveauCarburant_id} onChange={() => handleCarburantChange()}>
-                                <option></option>
+                                    <option></option>
                                     {
                                         dataCarburant.map(item => (
                                             <option key={item.carburant_id} value={item.carburant_id}>{item.nom}</option>
@@ -295,11 +318,11 @@ const VoirReleves = () => {
                         </div>
                         <div className="d-flex mb-3 input-container">
                             <div className="form-group input-content">
-                                <label htmlFor="" className="form-label">Quantité du départ :</label>
+                                <label htmlFor="" className="form-label">Quantité du départ (L):</label>
                                 <input type="number" value={nouveauQuantiteAvant || ''} className="form-control" onChange={(e) => setNouveauQuantiteAvant(parseFloat(e.target.value) || 0)} />
                             </div>
                             <div className="form-group input-content">
-                                <label htmlFor="" className="form-label">Quantité Après vente :</label>
+                                <label htmlFor="" className="form-label">Quantité Après vente (L):</label>
                                 <input type="number" ref={nouveauQuantiteApres} className="form-control" defaultValue={0} />
                             </div>
                         </div>
@@ -377,8 +400,8 @@ const VoirReleves = () => {
                                 {/* <th>index_id</th> */}
                                 <th>Carburant</th>
                                 <th>Pompe_id</th>
-                                <th>Quantité avant</th>
-                                <th>Quantité après</th>
+                                <th>Quantité avant (L)</th>
+                                <th>Quantité après (L)</th>
                                 <th>Date</th>
                                 <th>Action</th>
                             </tr>

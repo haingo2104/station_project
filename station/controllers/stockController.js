@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AjouterStock, ModifierStock, ObtenirStock, ObtenirStocksParCarburantParDate, ObtenirStocksParDate, ObtenirStocksPlusAncien, ObtenirStocksPlusRecent, ObtenirTousLesStocks, SupprimerStock, afficherStock } from "../services/stockService.js";
+import { AjouterStock, ModifierStock, ObtenirStock, ObtenirStocksParCarburantParDate, ObtenirStocksParDate, ObtenirStocksPlusAncien, ObtenirStocksPlusRecent, ObtenirTousLesStocks, SupprimerStock, afficherStock, calculerStockRestant } from "../services/stockService.js";
 
 export default Router()
 
@@ -19,6 +19,16 @@ export default Router()
             return res.status(200).json({ stocks: await ObtenirTousLesStocks(parseInt(page), parseInt(limit)) })
         } catch (error) {
             next(error)
+        }
+    })
+
+    .get('/stock-restant', async (req, res, next) => {
+        try {
+            const seuilCritique = 500;
+            const stocks = await calculerStockRestant(seuilCritique);
+            return res.status(200).json(stocks);
+        } catch (error) {
+            next(error);
         }
     })
 

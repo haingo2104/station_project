@@ -7,7 +7,14 @@ export const AjouterRelever = async(quantiteAvant , quantiteApres,carburant_id ,
     if (error) {
         throw new ClientError(error.message)
     }
-    return await prisma.relever.create({
+    if (value.quantiteApres >= value.quantiteAvant) {
+        throw new ClientError('La quantité après doit être inférieure à la quantité avant.');
+    }
+
+    // Calcul de la quantité utilisée
+    const quantiteVendue = value.quantiteAvant - value.quantiteApres;
+
+    const relever = await prisma.relever.create({
         data : {
             quantiteAvant: value.quantiteAvant,
             quantiteApres : value.quantiteApres,
@@ -15,6 +22,19 @@ export const AjouterRelever = async(quantiteAvant , quantiteApres,carburant_id ,
             pompe_id : value.pompe_id
         }
     })
+
+    const updatedStock = await prisma.stock.updateMany({
+        where: {
+            carburant_id: value.carburant_id,
+        },
+        data: {
+            quantite: {
+                decrement: quantiteVendue, // Décrémente la quantité en stock
+            },
+        },
+    });
+
+    return { relever, updatedStock };
 }
 
 export const obtenirTousLesRelevers = async() =>{

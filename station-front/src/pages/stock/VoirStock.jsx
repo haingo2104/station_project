@@ -2,15 +2,17 @@ import React from 'react';
 import axios from "axios"
 import { useRef, useState } from "react"
 import { useEffect } from "react"
-import { Col, Row, Modal, Form } from "react-bootstrap"
+import { Col, Row, Modal, Form, ProgressBar } from "react-bootstrap"
 import SideBar from "../sidebar/Sidebar"
 import { useNavigate } from "react-router-dom"
 import logo from "../../images/logo_station.png";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 const VoirStock = () => {
     const [stocks, setStock] = useState([])
+    const [stockRestant, setStockRestant] = useState([])
     const [carburants, setCarburants] = useState([])
-    // const nouvelleValeurRef = useRef();
     const carburantId = useRef(null);
     const carburant_id = useRef(null);
     const [selectedId, setSelectedId] = useState(null)
@@ -22,9 +24,11 @@ const VoirStock = () => {
     const newQuantity = useRef(null)
     const nouvellequantite = useRef(null)
     const nouveaucarburant_id = useRef(null)
-    const [newIdCarburant , setNewIdCarburant] = useState(null)
+    const [newIdCarburant, setNewIdCarburant] = useState(null)
     const [datacarburant, setDataCarburant] = useState([])
     const navigate = useNavigate()
+
+
     const ajouterStock = (e) => {
         e.preventDefault()
         axios.post('http://localhost:9000/stocks', {
@@ -39,7 +43,7 @@ const VoirStock = () => {
                 console.log(e);
             })
     }
-    const handleNewCarburant = (e) =>{
+    const handleNewCarburant = (e) => {
         setNewIdCarburant(e.target.value)
     }
     const handleClick = (id) => {
@@ -192,10 +196,20 @@ const VoirStock = () => {
             }
         };
 
+        const fetchStocksRestants = async () => {
+            try {
+                const response = await fetch('http://localhost:9000/stocks/stock-restant');
+                const data = await response.json();
+                console.log('Stocks restants :', data);
+                setStockRestant(data); // Met à jour l'état dans React
+            } catch (error) {
+                console.error('Erreur lors du chargement des stocks restants :', error);
+            }
+        };
+
         fetchData();
+        fetchStocksRestants();
     }, [triParType, stocks]);
-
-
 
 
 
@@ -217,28 +231,66 @@ const VoirStock = () => {
                     </div>
                 </div>
                 <Row className="mb-5">
-                    <form onSubmit={ajouterStock}>
-                        <div className="form-group input-content mb-3">
-                            <label htmlFor="carburant">Carburant</label>
-                            <select className="form-select" ref={nouveaucarburant_id}>
-                                {
-                                    datacarburant.map(item => (
-                                        <option key={item.carburant_id} value={item.carburant_id}>{item.nom}</option>
-                                    ))
-                                }
-                            </select>
+                    <Col>
+                        <form onSubmit={ajouterStock}>
+                            <div className="form-group input-content mb-3">
+                                <label htmlFor="carburant">Carburant</label>
+                                <select className="form-select" ref={nouveaucarburant_id}>
+                                    {
+                                        datacarburant.map(item => (
+                                            <option key={item.carburant_id} value={item.carburant_id}>{item.nom}</option>
+                                        ))
+                                    }
+                                </select>
 
-                        </div>
-                        <div className="form-group input-content mb-3">
-                            <label htmlFor="quantite">Quantité</label>
-                            <input type="number" ref={nouvellequantite} className="form-control" />
-                        </div>
+                            </div>
+                            <div className="form-group input-content mb-3">
+                                <label htmlFor="quantite">Quantité (L)</label>
+                                <input type="number" ref={nouvellequantite} className="form-control" />
+                            </div>
 
-                        <div className="mt-3">
-                            <button type="submit" id="bouton" className="btn btn-success">Ajouter</button>
-                        </div>
+                            <div className="mt-3">
+                                <button type="submit" id="bouton" className="btn btn-success">Ajouter</button>
+                            </div>
 
-                    </form>
+                        </form>
+                    </Col>
+
+                    <Col>
+                        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                            {stockRestant.map((stock) => (
+                                <div key={stock.nom} style={{ textAlign: 'center', width: '150px' }}>
+                                    <h3>{stock.nom}</h3>
+                                    <div style={{ width: 100, height: 100 }}>
+                                        <CircularProgressbar
+                                            value={Math.max(
+                                                0,
+                                                Math.min(100, (stock.stockRestant * 100) / stock.quantiteLivree)
+                                            )}
+                                            text={`${Math.round(
+                                                (stock.stockRestant * 100) / stock.quantiteLivree
+                                            )}%`}
+                                            strokeWidth={10}
+                                            styles={{
+                                                path: {
+                                                    stroke: stock.alerteStockBas ? 'red' : 'green',
+                                                },
+                                                trail: {
+                                                    stroke: '#d6d6d6',
+                                                },
+                                                text: {
+                                                    fill: '#000',
+                                                    fontSize: '16px',
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                    <div>{stock.stockRestant} L restants</div>
+                                </div>
+                            ))}
+                        </div>
+                    </Col>
+
                 </Row>
                 <Row>
                     <Col>
@@ -294,11 +346,10 @@ const VoirStock = () => {
                     <table className='table'>
                         <thead>
                             <tr>
-                                <th>carburant</th>
-                                <th>quantité</th>
-                                <th>date</th>
-                                <th>Action 1</th>
-                                <th>Action 2</th>
+                                <th>Carburant</th>
+                                <th>Quantité (L)</th>
+                                <th>Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
@@ -309,8 +360,10 @@ const VoirStock = () => {
                                     <td>{item.carburant.nom}</td>
                                     <td>{item.quantite}</td>
                                     <td>{item.Date}</td>
-                                    <td><button className="btn btn-success" onClick={() => handleClick(item.stock_id)}>Modifier</button></td>
-                                    <td><button className="btn btn-danger" onClick={() => supprimer(item.stock_id)}>Supprimer</button></td>
+                                    <td>
+                                        <button className="btn btn-success" style={{marginRight : "5px"}} onClick={() => handleClick(item.stock_id)}>Modifier</button>
+                                        <button className="btn btn-danger" onClick={() => supprimer(item.stock_id)}>Supprimer</button>
+                                    </td>
                                 </tr>
                             ))
                             }

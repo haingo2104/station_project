@@ -6,11 +6,11 @@ const refreshKey = process.env.REFRESH_KEY || "sdfgsdfgdf"
 
 
 export const getAccessToken = (payload) => {
-    return jwt.sign(payload, accessKey, { expiresIn: "15m" }); // Notez "15m" au lieu de "15min"
+    return jwt.sign(payload, accessKey, { expiresIn: "60m" }); 
 };
 
 export const getRefreshToken = (payload) => {
-    return jwt.sign(payload, refreshKey, { expiresIn: "30d" }); // Notez "30d" au lieu de "30days"
+    return jwt.sign(payload, refreshKey, { expiresIn: "30d" }); 
 };
 
 

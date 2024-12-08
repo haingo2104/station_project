@@ -387,7 +387,7 @@ const VoirVente = () => {
                                 <th>pompiste_id</th>
                                 <th>Nom</th>
                                 <th>modeDePaie</th>
-                                <th>Total</th>
+                                <th>Total (Ar)</th>
                                 <th>Date</th>
                             </tr>
                         </thead>

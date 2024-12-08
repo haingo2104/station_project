@@ -60,7 +60,7 @@ const AjouterFournisseur = () => {
             <img src={logo} alt="" style={{ width: "50%", marginTop: "-20px" }} />
           </div>
           <div style={{ width: "50%" }}>
-            <h1 className="text-center">Fournisseurs</h1>
+            <h3 className="text-center">Gestion des fournisseurs</h3>
           </div>
           <div style={{ width: "25%", marginRight: "25px" }} className="text-end">
             <button onClick={logout} className="btn btn-primary p-3">Déconnexion</button>
